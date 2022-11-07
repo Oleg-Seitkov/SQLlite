@@ -1,0 +1,64 @@
+Чтобы не добавлять города вручную, возьмем готовый набор данных — city.csv 
+
+$ sqlite3 city-1.db
+SQLite version 3.38.0 2022-02-22 18:58:40
+Enter ".help" for usage hints.
+sqlite> .mode box
+sqlite> .import --csv city.csv city
+sqlite> select count(*) from city;
+┌──────────┐
+│ count(*) │
+├──────────┤
+│ 1117     │
+└──────────┘
+Команда .import автоматически создала таблицу city со всеми столбцами из city.csv и загрузила данные из файла. Неплохо!
+
+Посмотрим, какие столбцы есть в таблице:
+
+sqlite> .schema city
+CREATE TABLE city(
+  "address" TEXT,
+  "postal_code" TEXT,
+  "country" TEXT,
+  "federal_district" TEXT,
+  "region_type" TEXT,
+  "region" TEXT,
+  "area_type" TEXT,
+  "area" TEXT,
+  "city_type" TEXT,
+  "city" TEXT,
+  "settlement_type" TEXT,
+  "settlement" TEXT,
+  "kladr_id" TEXT,
+  "fias_id" TEXT,
+  "fias_level" TEXT,
+  "capital_marker" TEXT,
+  "okato" TEXT,
+  "oktmo" TEXT,
+  "tax_office" TEXT,
+  "timezone" TEXT,
+  "geo_lat" TEXT,
+  "geo_lon" TEXT,
+  "population" TEXT,
+  "foundation_year" TEXT
+);
+И взглянем на содержимое:
+
+select federal_district, city, population
+from city limit 10;
+┌──────────────────┬───────────────┬────────────┐
+│ federal_district │     city      │ population │
+├──────────────────┼───────────────┼────────────┤
+│ Южный            │ Адыгейск      │ 12689      │
+│ Южный            │ Майкоп        │ 144055     │
+│ Сибирский        │ Горно-Алтайск │ 62861      │
+│ Сибирский        │ Алейск        │ 28528      │
+│ Сибирский        │ Барнаул       │ 635585     │
+│ Сибирский        │ Белокуриха    │ 15072      │
+│ Сибирский        │ Бийск         │ 203826     │
+│ Сибирский        │ Горняк        │ 13040      │
+│ Сибирский        │ Заринск       │ 47035      │
+│ Сибирский        │ Змеиногорск   │ 10569      │
+└──────────────────┴───────────────┴────────────┘
+Условие limit 10 указывает, что вернется не более 10 записей. Рекомендую всегда использовать limit, если запрос может вернуть много записей.
+

@@ -1,0 +1,28 @@
+Утилита sqlite3 работает с базами данных SQLite. Она поддерживает язык SQL и специальные команды (начинаются с точки). Главная команда — .help.
+
+.help КОМАНДА
+Команда .import загружает данные из CSV-файла в таблицу.
+
+.import --csv city.csv city
+Формат CSV настраивается командами .headers и .separator. 
+
+.mode csv
+.headers on
+.separator |
+.import samara.csv samara
+Команда .once в связке с select выгружает данные из таблицы в файл.
+
+.mode csv
+.once city.csv
+select * from city;
+Формат файла настраивается командами .mode, .headers и .separator.
+
+.mode json
+.mode insert
+.mode markdown
+.mode html
+SQLite поддерживает стандартный SQL-синтаксис:
+
+фильтрацию по условиям в WHERE,
+группировку GROUP BY и сортировку ORDER BY,
+табличные выражения WITH name AS (SELECT ...).

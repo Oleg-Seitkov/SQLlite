@@ -1,0 +1,102 @@
+В SQLite нет отдельного типа для дат. Вместо этого даты хранятся текстом в формате ISO (2020-03-15). Операторы сравнения нормально работают на таких «текстовых» датах. Проверим на наборе данных books.csv (песочница).
+
+Строгое равенство:
+
+select
+  book_id,
+  substr(title, 0, 20) as title,
+  publication_date
+from books
+where publication_date = '2006-09-01'
+limit 5
+;
+┌─────────┬─────────────────────┬──────────────────┐
+│ book_id │        title        │ publication_date │
+├─────────┼─────────────────────┼──────────────────┤
+│ 2560    │ Willem de Kooning:  │ 2006-09-01       │
+│ 3117    │ The Rescue (Kidnapp │ 2006-09-01       │
+│ 3447    │ In the Lake of the  │ 2006-09-01       │
+│ 3797    │ Miss Happiness and  │ 2006-09-01       │
+│ 5065    │ Whiteout            │ 2006-09-01       │
+└─────────┴─────────────────────┴──────────────────┘
+Даты позднее указанной:
+
+select
+  book_id,
+  substr(title, 0, 20) as title,
+  publication_date
+from books
+where publication_date > '2006-01-01'
+limit 5
+;
+┌─────────┬─────────────────────┬──────────────────┐
+│ book_id │        title        │ publication_date │
+├─────────┼─────────────────────┼──────────────────┤
+│ 1       │ Harry Potter and th │ 2006-09-16       │
+│ 30      │ J.R.R. Tolkien 4-Bo │ 2012-09-25       │
+│ 58      │ Changeling (Changel │ 2006-08-17       │
+│ 67      │ The Known World     │ 2006-08-29       │
+│ 71      │ Traders Guns & Mone │ 2006-05-15       │
+└─────────┴─────────────────────┴──────────────────┘
+Диапазон дат (включая границы):
+
+select
+  book_id,
+  substr(title, 0, 20) as title,
+  publication_date
+from books
+where publication_date between '2006-01-01' and '2006-01-31'
+limit 5
+;
+┌─────────┬─────────────────────┬──────────────────┐
+│ book_id │        title        │ publication_date │
+├─────────┼─────────────────────┼──────────────────┤
+│ 135     │ What to Sell on eba │ 2006-01-24       │
+│ 159     │ Dinner with Anna Ka │ 2006-01-28       │
+│ 205     │ A Long Shadow (Insp │ 2006-01-03       │
+│ 302     │ Treasure Island (Gr │ 2006-01-31       │
+│ 1403    │ City Eclogue        │ 2006-01-30       │
+└─────────┴─────────────────────┴──────────────────┘
+
++++++++++++++++++++++++++++
+Арифметика с датами
+++++++++++++++++++++++++++++
+
+Основная функция для работы с датами — date():
+
+sqlite> -- сегодня
+sqlite> select date('now');
+2021-01-10
+
+sqlite> -- завтра
+sqlite> select date('now', '1 day');
+2021-01-11
+
+sqlite> -- вчера
+sqlite> select date('now', '-1 day');
+2021-01-09
+
+sqlite> -- три месяца назад от 1 сентября
+sqlite> select date('2020-09-01', '-3 months');
+2020-06-01
+
+sqlite> -- год назад
+sqlite> select date('now', '-1 year');
+2020-01-10
+В общем виде функция выглядит так:
+
+date(value, modifier, modifier, ...)
+value — значение даты в формате гггг-мм-дд или специальное значение now,
+modifier — выражение, которое модифицирует value.
+Модификаторы можно комбинировать. Например, первая среда нынешнего месяца:
+
+sqlite> select date('now', 'start of month', 'weekday 3');
+2021-01-06
+Основные модификаторы:
+
+N days — вперед или назад на N дней;
+N months — вперед или назад на N месяцев;
+N years — вперед или назад на N лет;
+start of month — первое число месяца;
+start of year — первое число года;
+weekday N — день недели по порядковому номеру (понедельник = 1, вторник = 2, ..., суббота = 6, воскресенье = 0
