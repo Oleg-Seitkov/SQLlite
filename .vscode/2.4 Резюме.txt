@@ -1,0 +1,70 @@
+Типы данных в SQLite: INTEGER, REAL, TEXT, BLOB и NULL. Даты хранятся как TEXT в формате гггг-мм-дд, а логические значения — как INTEGER 0 или 1.
+
+Основные функции:
+
+Числа: min, max, random.
+Строки: length, instr, substr, replace.
+Даты: date.
+Логические: iif.
+NULL: coalesce, nullif.
+
+INTEGER / REAL
+Действительные и целые числа.
+
+min(x, y, ...)
+max(x, y, ...)
+random()
+TEXT
+Строки в кодировке UTF-8. Безразмерные.
+
+функции:
+
+length(s)
+instr(s, substring)
+substr(s, from, length)
+substr(s, from)
+replace(s, substring, replacement)
+поиск по шаблону:
+
+значение GLOB 'шаблон'
+?      один символ
+*      что угодно
+[abc]  один из перечисленных 
+[^abc] кроме перечисленных 
+[a-z]  один из диапазона
+[^a-z] один не из диапазона
+Даты
+Хранятся текстом в формате ISO: гггг-мм-дд
+
+сравнение:
+
+d = '2020-06-01'
+d > '2020-06-01'
+d between '2020-06-01' and '2020-06-30'
+функции:
+
+date(value, modifier, modifier, ...)
+date('now')
+date('now', '1 day')
+date('now', '-1 day')
+date('2020-09-01', '-3 month')
+date('2020-12-19', '-1 year')
+NULL
+Пустое значение.
+
+сравнение:
+
+x is null
+x is not null
+функции:
+
+-- первый, кто не NULL
+coalesce(x, y, ...)
+
+-- NULL, если равны, иначе X
+nullif(x, y)
+Логические
+Логические значени: true = 1, false = 0
+
+-- если X, то Y, иначе Z
+iif(x, y, z)
