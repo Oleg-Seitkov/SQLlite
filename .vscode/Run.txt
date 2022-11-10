@@ -4,4 +4,5 @@
 .import --csv city.csv city
 .import --csv books.csv books
 .import --csv words.csv words
+
 . schema city
